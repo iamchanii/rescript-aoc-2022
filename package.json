@@ -1,0 +1,12 @@
+{
+  "name": "rescript-aoc-2022",
+  "type": "module",
+  "packageManager": "yarn@3.3.0",
+  "scripts": {
+    "res:build": "rescript",
+    "res:start": "rescript build -w"
+  },
+  "dependencies": {
+    "rescript": "^10.0.1"
+  }
+}
