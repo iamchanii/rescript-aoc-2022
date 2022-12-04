@@ -6,22 +6,6 @@ import * as Caml_exceptions from "rescript/lib/es6/caml_exceptions.js";
 
 var InvalidInput = /* @__PURE__ */Caml_exceptions.create("Day2.InvalidInput");
 
-function parseMyResponse(input) {
-  switch (input) {
-    case "X" :
-        return /* Rock */0;
-    case "Y" :
-        return /* Paper */2;
-    case "Z" :
-        return /* Scissors */1;
-    default:
-      throw {
-            RE_EXN_ID: InvalidInput,
-            Error: new Error()
-          };
-  }
-}
-
 function parseOpponentResponse(input) {
   switch (input) {
     case "A" :
@@ -38,12 +22,52 @@ function parseOpponentResponse(input) {
   }
 }
 
-function parseResponseRow(input) {
-  var array = input.split(" ");
-  return [
-          parseOpponentResponse(Caml_array.get(array, 0)),
-          parseMyResponse(Caml_array.get(array, 1))
-        ];
+function parseOwnResponse(input) {
+  switch (input) {
+    case "X" :
+        return /* Rock */0;
+    case "Y" :
+        return /* Paper */2;
+    case "Z" :
+        return /* Scissors */1;
+    default:
+      throw {
+            RE_EXN_ID: InvalidInput,
+            Error: new Error()
+          };
+  }
+}
+
+function parseOwnResponseByOpponentResponse(opponents, input) {
+  switch (input) {
+    case "X" :
+        switch (opponents) {
+          case /* Rock */0 :
+              return /* Scissors */1;
+          case /* Scissors */1 :
+              return /* Paper */2;
+          case /* Paper */2 :
+              return /* Rock */0;
+          
+        }
+    case "Y" :
+        return opponents;
+    case "Z" :
+        switch (opponents) {
+          case /* Rock */0 :
+              return /* Paper */2;
+          case /* Scissors */1 :
+              return /* Rock */0;
+          case /* Paper */2 :
+              return /* Scissors */1;
+          
+        }
+    default:
+      throw {
+            RE_EXN_ID: InvalidInput,
+            Error: new Error()
+          };
+  }
 }
 
 function calculateResultScore(round) {
@@ -94,12 +118,8 @@ function calculateInputScore(input) {
   }
 }
 
-function parseInput(param) {
-  return Core.readInput(undefined).split("\n").map(parseResponseRow);
-}
-
-function part1(param) {
-  return parseInput(undefined).reduce((function (result, param) {
+function calculate(rows) {
+  return rows.reduce((function (result, param) {
                 var own = param[1];
                 return (result + calculateResultScore([
                               param[0],
@@ -108,14 +128,36 @@ function part1(param) {
               }), 0);
 }
 
+function part1(param) {
+  return calculate(Core.readInput(undefined).split("\n").map(function (row) {
+                  var array = row.split(" ");
+                  return [
+                          parseOpponentResponse(Caml_array.get(array, 0)),
+                          parseOwnResponse(Caml_array.get(array, 1))
+                        ];
+                }));
+}
+
+function part2(param) {
+  return calculate(Core.readInput(undefined).split("\n").map(function (row) {
+                  var array = row.split(" ");
+                  var opponents = parseOpponentResponse(Caml_array.get(array, 0));
+                  return [
+                          opponents,
+                          parseOwnResponseByOpponentResponse(opponents, Caml_array.get(array, 1))
+                        ];
+                }));
+}
+
 export {
   InvalidInput ,
-  parseMyResponse ,
   parseOpponentResponse ,
-  parseResponseRow ,
+  parseOwnResponse ,
+  parseOwnResponseByOpponentResponse ,
   calculateResultScore ,
   calculateInputScore ,
-  parseInput ,
+  calculate ,
   part1 ,
+  part2 ,
 }
 /* Core Not a pure module */

@@ -2,7 +2,7 @@
 
 import * as Day2 from "./Day2.bs.js";
 
-console.log(Day2.part1(undefined));
+console.log(Day2.part2(undefined));
 
 export {
   

@@ -2,15 +2,6 @@ exception InvalidInput
 
 type response = Rock | Scissors | Paper
 
-let parseMyResponse = input => {
-  switch input {
-  | "X" => Rock
-  | "Y" => Paper
-  | "Z" => Scissors
-  | _ => raise(InvalidInput)
-  }
-}
-
 let parseOpponentResponse = input => {
   switch input {
   | "A" => Rock
@@ -20,9 +11,32 @@ let parseOpponentResponse = input => {
   }
 }
 
-let parseResponseRow = input => {
-  let array = input->Js.String2.split(" ")
-  (array[0]->parseOpponentResponse, array[1]->parseMyResponse)
+let parseOwnResponse = input => {
+  switch input {
+  | "X" => Rock
+  | "Y" => Paper
+  | "Z" => Scissors
+  | _ => raise(InvalidInput)
+  }
+}
+
+let parseOwnResponseByOpponentResponse = (opponents, input) => {
+  switch input {
+  | "X" =>
+    switch opponents {
+    | Rock => Scissors
+    | Scissors => Paper
+    | Paper => Rock
+    }
+  | "Y" => opponents
+  | "Z" =>
+    switch opponents {
+    | Rock => Paper
+    | Scissors => Rock
+    | Paper => Scissors
+    }
+  | _ => raise(InvalidInput)
+  }
 }
 
 let calculateResultScore = round => {
@@ -41,14 +55,30 @@ let calculateInputScore = input => {
   }
 }
 
-let parseInput = () => {
-  Core.readInput()->Js.String2.split("\n")->Js.Array2.map(parseResponseRow)
-}
-
-let part1 = () => {
-  parseInput()->Js.Array2.reduce(
+let calculate = rows =>
+  rows->Js.Array2.reduce(
     (result, (opponents, own)) =>
       result + calculateResultScore((opponents, own)) + calculateInputScore(own),
     0,
   )
+
+let part1 = () => {
+  Core.readInput()
+  ->Js.String2.split("\n")
+  ->Js.Array2.map(row => {
+    let array = row->Js.String2.split(" ")
+    (array[0]->parseOpponentResponse, array[1]->parseOwnResponse)
+  })
+  ->calculate
+}
+
+let part2 = () => {
+  Core.readInput()
+  ->Js.String2.split("\n")
+  ->Js.Array2.map(row => {
+    let array = row->Js.String2.split(" ")
+    let opponents = array[0]->parseOpponentResponse
+    (opponents, parseOwnResponseByOpponentResponse(opponents, array[1]))
+  })
+  ->calculate
 }

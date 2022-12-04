@@ -1,1 +1,1 @@
-Day2.part1()->Js.Console.log
+Day2.part2()->Js.Console.log
