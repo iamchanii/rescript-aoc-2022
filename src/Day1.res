@@ -15,6 +15,3 @@ let part2 = () => {
   ->Js.Array2.slice(~start=0, ~end_=3)
   ->Js.Array2.reduce((prev, curr) => prev + curr, 0)
 }
-
-// Js.Console.log(part1())
-Js.Console.log(part2())

@@ -27,11 +27,9 @@ function part2(param) {
               }), 0);
 }
 
-console.log(part2(undefined));
-
 export {
   parseInput ,
   part1 ,
   part2 ,
 }
-/*  Not a pure module */
+/* Core Not a pure module */
