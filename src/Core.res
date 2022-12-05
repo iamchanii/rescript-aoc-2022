@@ -9,3 +9,5 @@ let __dirname = __filename->Node.Path.dirname
 let readInput = () => {
   Node.Path.join([__dirname, "input.txt"])->Node.Fs.readFileAsUtf8Sync
 }
+
+// let fetchInput = () => ""
