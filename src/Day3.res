@@ -40,18 +40,23 @@ let calculatePriority = element => {
   priority->Belt.Int.fromFloat
 }
 
-let part1 = () => {
-  Core.readInput()
-  ->Js.String2.split("\n")
-  ->Js.Array2.map(row => {
-    let (left, right) = row->splitRow
-    findAppearsInBothCompartments(left, [right])
-  })
-  ->Js.Array2.reduce((result, element) => result + element->calculatePriority, 0)
+let parseInput = () => {
+  Core.fetchInput(~year=2022, ~day=3)->thenResolve(input => input->Js.String2.split("\n"))
 }
 
-let part2 = () => {
-  let list = Core.readInput()->Js.String2.split("\n")
+let part1 = () => {
+  parseInput()->thenResolve(list =>
+    list
+    ->Js.Array2.map(row => {
+      let (left, right) = row->splitRow
+      findAppearsInBothCompartments(left, [right])
+    })
+    ->Js.Array2.reduce((result, element) => result + element->calculatePriority, 0)
+  )
+}
+
+let part2 = async () => {
+  let list = await parseInput()
 
   let rec calculate = (arr, result: int) => {
     if arr->Js.Array2.length < 3 {

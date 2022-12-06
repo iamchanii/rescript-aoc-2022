@@ -8,6 +8,8 @@
     "start": "nodemon src/Main.bs.js"
   },
   "dependencies": {
+    "@ryyppy/rescript-promise": "^2.1.0",
+    "node-fetch": "^3.3.0",
     "rescript": "^10.0.1"
   },
   "devDependencies": {

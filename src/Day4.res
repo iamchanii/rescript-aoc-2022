@@ -28,11 +28,15 @@ let isPairsFullyContains = (leftAssignment, rightAssignment) => {
 }
 
 let parseInput = () => {
-  Core.readInput()->Js.String2.split("\n")->Js.Array2.map(parseRowIntoAssignmentTuple)
+  Core.fetchInput(~year=2022, ~day=4)->thenResolve(input => {
+    input->Js.String2.split("\n")->Js.Array2.map(parseRowIntoAssignmentTuple)
+  })
 }
 
-let part1 = () => {
-  parseInput()
+let part1 = async () => {
+  let input = await parseInput()
+
+  input
   ->Belt.Array.keepMap(row => {
     let left = row->Js.Array2.unsafe_get(0)
     let right = row->Js.Array2.unsafe_get(1)
@@ -52,8 +56,10 @@ let isIntersect = (leftAssignment: assignment, rightAssignment: assignment) => {
   leftMax - rightMin >= 0 && rightMax - leftMin >= 0
 }
 
-let part2 = () => {
-  parseInput()
+let part2 = async () => {
+  let input = await parseInput()
+
+  input
   ->Belt.Array.keepMap(row => {
     let left = row->Js.Array2.unsafe_get(0)
     let right = row->Js.Array2.unsafe_get(1)

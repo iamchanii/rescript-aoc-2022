@@ -10,6 +10,7 @@
 !.yarn/cache
 #.pnp.*
 
-input.txt
 node_modules
 lib
+.session
+*.bs.js

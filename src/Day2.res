@@ -62,23 +62,32 @@ let calculate = rows =>
     0,
   )
 
+let parseInput = () => {
+  Core.fetchInput(~year=2022, ~day=2)->thenResolve(input => input->Js.String2.split("\n\n"))
+}
+
 let part1 = () => {
-  Core.readInput()
-  ->Js.String2.split("\n")
-  ->Js.Array2.map(row => {
-    let array = row->Js.String2.split(" ")
-    (array[0]->parseOpponentResponse, array[1]->parseOwnResponse)
-  })
-  ->calculate
+  parseInput()->thenResolve(list =>
+    list
+    ->Js.Array2.map(row => {
+      let array = row->Js.String2.split(" ")
+      (
+        array->Array.getUnsafe(0)->parseOpponentResponse,
+        array->Array.getUnsafe(1)->parseOwnResponse,
+      )
+    })
+    ->calculate
+  )
 }
 
 let part2 = () => {
-  Core.readInput()
-  ->Js.String2.split("\n")
-  ->Js.Array2.map(row => {
-    let array = row->Js.String2.split(" ")
-    let opponents = array[0]->parseOpponentResponse
-    (opponents, parseOwnResponseByOpponentResponse(opponents, array[1]))
-  })
-  ->calculate
+  parseInput()->thenResolve(list =>
+    list
+    ->Js.Array2.map(row => {
+      let array = row->Js.String2.split(" ")
+      let opponents = array->Array.getUnsafe(0)->parseOpponentResponse
+      (opponents, parseOwnResponseByOpponentResponse(opponents, array->Array.getUnsafe(1)))
+    })
+    ->calculate
+  )
 }
