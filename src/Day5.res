@@ -1,7 +1,3 @@
-// 줄 단위로 읽고
-// 공백이면 패스
-// move 로 시작하면 명령어
-
 type operation = {from: int, to: int, count: int}
 
 let parseInput = async () => {
@@ -89,7 +85,7 @@ let parseInput = async () => {
   (stacks, operations)
 }
 
-let day1 = async () => {
+let part1 = async () => {
   let (stacks, operations) = await parseInput()
 
   operations->Js.Array2.forEach(({from, to, count}) => {
@@ -101,6 +97,28 @@ let day1 = async () => {
       | _ => ()
       }
     })
+  })
+
+  stacks->Array.map(stack => stack->Array.getExn(stack->Array.length - 1))->Js.Array2.joinWith("")
+}
+
+let part2 = async () => {
+  let (stacks, operations) = await parseInput()
+
+  operations->Js.Array2.forEach(({from, to, count}) => {
+    let fromStack = stacks->Array.getExn(from)
+    let toStack = stacks->Array.getExn(to)
+
+    stacks->Array.setExn(
+      to,
+      toStack->Js.Array2.concat(
+        fromStack->Js.Array2.spliceInPlace(
+          ~add=[],
+          ~pos=fromStack->Js.Array2.length - count,
+          ~remove=count,
+        ),
+      ),
+    )
   })
 
   stacks->Array.map(stack => stack->Array.getExn(stack->Array.length - 1))->Js.Array2.joinWith("")
