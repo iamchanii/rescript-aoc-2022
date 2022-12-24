@@ -1,5 +1,5 @@
 let run = async () => {
-  Js.log(await Day5.part2())
+  Js.log(await Day6.part1())
 }
 
 run()->ignore
