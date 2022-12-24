@@ -35,5 +35,5 @@ let fetchInput = (~year: int, ~day: int) => {
     },
   }
 
-  fetch(url, params)->then(response => response->Response.text)->thenResolve(Js.String2.trim)
+  fetch(url, params)->then(response => response->Response.text)
 }
