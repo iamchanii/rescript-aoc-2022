@@ -109,6 +109,43 @@ let part1 = async () => {
 }
 
 let part2 = async () => {
-  // parseInput()
-  ()
+  let rootNode = (await Core.fetchInput(~year=2022, ~day=7))->parseDirectoryTree
+
+  let rec findSmallestDirectory = (
+    node: node,
+    candidateNode: ref<option<node>>,
+    targetSize: int,
+  ): option<node> => {
+    switch node.type_ {
+    | #file => candidateNode.contents
+    | #directory => {
+        let childNodes = node.children->Option.getUnsafe->Js.Dict.values
+
+        for i in 0 to childNodes->Array.length - 1 {
+          candidateNode :=
+            findSmallestDirectory(childNodes[i]->Option.getUnsafe, candidateNode, targetSize)
+        }
+
+        switch node.size < targetSize {
+        | true => candidateNode.contents
+        | false =>
+          switch candidateNode.contents {
+          | None => Some(node)
+          | Some(candidateNode_) =>
+            switch node.size <= candidateNode_.size {
+            | true => Some(node)
+            | _ => Some(candidateNode_)
+            }
+          }
+        }
+      }
+    }
+  }
+
+  let totalDiskSize = 70000000
+  let freeSpaceNeeded = 30000000
+  let currentlyFreeSpace = totalDiskSize - rootNode->getNodeSize
+  let moreSpaceNeeded = freeSpaceNeeded - currentlyFreeSpace
+
+  (findSmallestDirectory(rootNode, ref(None), moreSpaceNeeded)->Option.getUnsafe).size
 }
